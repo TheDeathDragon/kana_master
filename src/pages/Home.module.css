@@ -47,6 +47,12 @@
   background: var(--bg-tertiary);
 }
 
+a.toggleButton {
+  text-decoration: none;
+  width: auto;
+  padding: 0 12px;
+}
+
 .main {
   flex: 1;
   display: flex;

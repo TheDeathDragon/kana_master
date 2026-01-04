@@ -29,6 +29,15 @@ export function Home({ onStartStudy, onNavigate }: HomeProps): React.ReactElemen
       <header className={styles.header}>
         <h1 className={styles.title}>{t.home.title}</h1>
         <div className={styles.headerButtons}>
+          <a
+            className={styles.toggleButton}
+            href="https://github.com/TheDeathDragon/kana_master"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="GitHub"
+          >
+            GitHub
+          </a>
           <button
             className={styles.toggleButton}
             onClick={toggleTheme}

@@ -5,6 +5,15 @@
   padding: 20px;
 }
 
+.mainContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
 .header {
   display: flex;
   align-items: center;
@@ -60,6 +69,17 @@
   align-items: center;
   padding: 40px 20px;
   cursor: pointer;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.cardVisible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.cardHidden {
+  opacity: 0;
+  transform: translateX(-30px);
 }
 
 .kanaDisplay {
@@ -86,19 +106,49 @@
   font-size: 2rem;
   font-weight: 600;
   color: var(--text-primary);
+  min-height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .hint {
   color: var(--text-secondary);
   font-size: 14px;
+  min-height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .qualityButtons {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 16px;
   padding: 20px 20px 40px;
+  visibility: hidden;
+  pointer-events: none;
+  opacity: 0;
+  transition:
+    opacity var(--animation-normal) var(--ease-out-expo),
+    transform var(--animation-normal) var(--ease-out-expo),
+    visibility 0s linear var(--animation-normal);
+}
+
+.qualityButtons.optionsVisible {
+  visibility: visible;
+  pointer-events: auto;
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  transition:
+    opacity var(--animation-normal) var(--ease-out-expo),
+    transform var(--animation-normal) var(--ease-out-expo),
+    visibility 0s linear 0s;
 }
 
 .qualityLabel {
@@ -107,10 +157,11 @@
 }
 
 .buttons {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 12px;
-  flex-wrap: wrap;
-  justify-content: center;
+  max-width: 320px;
+  margin: 0 auto;
 }
 
 .qualityButton {
@@ -137,4 +188,100 @@
   font-size: 12px;
   opacity: 0.8;
   margin-bottom: 4px;
+}
+
+@media (min-width: 768px) {
+  .mainContent {
+    flex-direction: row;
+    gap: 60px;
+  }
+
+  .questionArea {
+    flex: none;
+    padding: 40px;
+    min-width: 300px;
+  }
+
+  .kanaDisplay {
+    margin-bottom: 24px;
+  }
+
+  .mainKana {
+    font-size: 8rem;
+  }
+
+  .pairedKana {
+    font-size: 4rem;
+  }
+
+  .romaji,
+  .hint {
+    min-height: 3rem;
+  }
+
+  .romaji {
+    font-size: 2.5rem;
+  }
+
+  .qualityButtons {
+    position: static;
+    flex: none;
+    padding: 40px;
+    width: 320px;
+    visibility: hidden;
+    pointer-events: none;
+    opacity: 0;
+    clip-path: inset(0 100% 0 0);
+    transform: none;
+    transition:
+      opacity var(--animation-slow) var(--ease-out-expo),
+      clip-path var(--animation-slow) var(--ease-out-expo),
+      visibility 0s linear var(--animation-slow);
+  }
+
+  .qualityButtons.optionsVisible {
+    visibility: visible;
+    pointer-events: auto;
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+    transform: none;
+    transition:
+      opacity var(--animation-slow) var(--ease-out-expo),
+      clip-path var(--animation-slow) var(--ease-out-expo),
+      visibility 0s linear 0s;
+  }
+
+  .buttons {
+    max-width: none;
+  }
+}
+
+@keyframes cardSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes cardSlideOut {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+}
+
+.cardEntering {
+  animation: cardSlideIn var(--animation-normal) var(--ease-out-expo) forwards;
+}
+
+.cardExiting {
+  animation: cardSlideOut var(--animation-normal) var(--ease-out-expo) forwards;
 }

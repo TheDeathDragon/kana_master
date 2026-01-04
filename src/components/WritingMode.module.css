@@ -54,6 +54,12 @@
   white-space: nowrap;
 }
 
+.mainContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
 .questionArea {
   display: flex;
   flex-direction: column;
@@ -105,11 +111,15 @@
   background: var(--card-bg);
   color: var(--text-primary);
   outline: none;
-  transition: border-color 0.2s ease;
+  transition:
+    border-color var(--animation-fast) ease,
+    background-color var(--animation-fast) ease,
+    box-shadow var(--animation-fast) ease;
 }
 
 .input:focus {
   border-color: var(--primary);
+  box-shadow: 0 0 0 4px var(--primary-light);
 }
 
 .input::placeholder {
@@ -120,11 +130,13 @@
 .inputCorrect {
   border-color: #22c55e;
   background: rgba(34, 197, 94, 0.1);
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.15);
 }
 
 .inputIncorrect {
   border-color: #ef4444;
   background: rgba(239, 68, 68, 0.1);
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.15);
 }
 
 .inputShake {
@@ -189,12 +201,51 @@
   align-items: center;
   gap: 16px;
   padding: 20px;
+  animation: feedbackFadeIn 0.3s ease forwards;
+}
+
+@keyframes feedbackFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .correctText {
   font-size: 24px;
   font-weight: 600;
   color: #22c55e;
+}
+
+.feedbackWithProgress {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  padding-bottom: 24px;
+  animation: feedbackFadeIn 0.3s ease forwards;
+  overflow: hidden;
+}
+
+@keyframes countdownProgress {
+  from { width: 100%; }
+  to { width: 0%; }
+}
+
+.autoAdvanceBar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: var(--success);
+  border-radius: 2px;
+  animation: countdownProgress 1s linear forwards;
 }
 
 .incorrectFeedback {
@@ -245,4 +296,37 @@
 .hint p {
   font-size: 14px;
   color: var(--text-tertiary);
+}
+
+.answerArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .mainContent {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 60px;
+  }
+
+  .questionArea {
+    flex: none;
+    min-width: 280px;
+  }
+
+  .mainKana {
+    font-size: 8rem;
+  }
+
+  .pairedKana {
+    font-size: 4rem;
+  }
+
+  .answerArea {
+    flex: none;
+    min-width: 280px;
+  }
 }

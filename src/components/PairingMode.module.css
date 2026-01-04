@@ -82,6 +82,17 @@
   padding: 0 20px;
 }
 
+@keyframes optionEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
 .option {
   display: flex;
   flex-direction: column;
@@ -92,12 +103,28 @@
   border: 2px solid var(--border);
   border-radius: 12px;
   cursor: pointer;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color var(--animation-fast) ease,
+    background-color var(--animation-fast) ease,
+    box-shadow var(--animation-fast) ease,
+    transform var(--animation-fast) var(--ease-out-back);
+  animation: optionEnter var(--animation-normal) var(--ease-out-back) backwards;
 }
+
+.option:nth-child(1) { animation-delay: 0ms; }
+.option:nth-child(2) { animation-delay: 50ms; }
+.option:nth-child(3) { animation-delay: 100ms; }
+.option:nth-child(4) { animation-delay: 150ms; }
 
 .option:hover:not(:disabled) {
   border-color: var(--primary);
+  background-color: var(--primary-light);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.option:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
 }
 
 .option:disabled {
@@ -121,9 +148,21 @@
   background: var(--primary-light);
 }
 
+@keyframes correctPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+
+@keyframes optionShake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-4px); }
+  40%, 80% { transform: translateX(4px); }
+}
+
 .correct {
   border-color: #22c55e;
   background: rgba(34, 197, 94, 0.1);
+  animation: correctPulse 0.3s var(--ease-out-back);
 }
 
 .correct .optionText {
@@ -133,10 +172,22 @@
 .incorrect {
   border-color: #ef4444;
   background: rgba(239, 68, 68, 0.1);
+  animation: optionShake 0.4s ease;
 }
 
 .incorrect .optionText {
   color: #ef4444;
+}
+
+@keyframes feedbackFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .feedback {
@@ -145,6 +196,7 @@
   align-items: center;
   gap: 16px;
   padding: 20px;
+  animation: feedbackFadeIn 0.3s var(--ease-out-expo) forwards;
 }
 
 .correctText {

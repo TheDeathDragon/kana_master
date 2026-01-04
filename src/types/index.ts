@@ -69,7 +69,7 @@ export interface AppStorage {
   learnedKanaIds: string[];
 }
 
-export type StudyMode = 'flashcard' | 'quiz' | 'writing' | 'pairing';
+export type StudyMode = 'combo' | 'flashcard' | 'quiz' | 'writing' | 'pairing';
 
 export type ExtraStudyType = 'normal' | 'extra-new' | 'extra-review' | 'practice';
 

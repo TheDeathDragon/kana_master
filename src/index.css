@@ -2,6 +2,7 @@
 
 :root {
   --primary: #6366f1;
+  --primary-hover: #4f46e5;
   --primary-light: rgba(99, 102, 241, 0.1);
   --primary-dark: #4f46e5;
   --bg-primary: #f8fafc;
@@ -15,10 +16,16 @@
   --success: #22c55e;
   --warning: #f59e0b;
   --error: #ef4444;
+  --animation-fast: 150ms;
+  --animation-normal: 250ms;
+  --animation-slow: 350ms;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 [data-theme="dark"] {
   --primary: #818cf8;
+  --primary-hover: #a5b4fc;
   --primary-light: rgba(129, 140, 248, 0.15);
   --primary-dark: #6366f1;
   --bg-primary: #0f172a;

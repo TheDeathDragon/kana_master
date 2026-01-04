@@ -109,48 +109,52 @@ export function QuizMode({ cards, onComplete, onExit, t }: QuizModeProps): React
           </span>
         </div>
       </div>
-      <div className={styles.questionArea}>
-        <div className={styles.kanaDisplay}>
-          <span className={styles.mainKana}>{currentCard.type === 'hiragana' ? currentCard.character : findPairedKana(currentCard)?.character}</span>
-          <span className={styles.pairedKana}>{currentCard.type === 'katakana' ? currentCard.character : findPairedKana(currentCard)?.character}</span>
+      <div className={styles.mainContent}>
+        <div className={styles.questionArea}>
+          <div className={styles.kanaDisplay}>
+            <span className={styles.mainKana}>{currentCard.type === 'hiragana' ? currentCard.character : findPairedKana(currentCard)?.character}</span>
+            <span className={styles.pairedKana}>{currentCard.type === 'katakana' ? currentCard.character : findPairedKana(currentCard)?.character}</span>
+          </div>
+          <p className={styles.question}>{t.quiz.whatIsRomaji}</p>
         </div>
-        <p className={styles.question}>{t.quiz.whatIsRomaji}</p>
-      </div>
-      <div className={styles.optionsGrid}>
-        {options.map((option, idx) => {
-          let optionClass = styles.option;
-          if (isAnswered) {
-            if (option.id === currentCard.id) {
-              optionClass += ` ${styles.correct}`;
-            } else if (option.id === selectedAnswer) {
-              optionClass += ` ${styles.incorrect}`;
-            }
-          } else if (option.id === selectedAnswer) {
-            optionClass += ` ${styles.selected}`;
-          }
-          return (
-            <button
-              key={option.id}
-              className={optionClass}
-              onClick={() => handleSelect(option)}
-              disabled={isAnswered}
-            >
-              <span className={styles.optionNumber}>{idx + 1}</span>
-              <span className={styles.optionText}>{option.romaji}</span>
-            </button>
-          );
-        })}
-      </div>
-      {isAnswered && (
-        <div className={styles.feedback}>
-          <p className={isCorrect ? styles.correctText : styles.incorrectText}>
-            {isCorrect ? t.quiz.correct : `${t.quiz.incorrect} "${currentCard.romaji}"`}
-          </p>
-          <button className={styles.nextButton} onClick={handleNext}>
-            {(queue.length === 1 && isCorrect) ? t.quiz.finish : t.quiz.next}
-          </button>
+        <div className={styles.answerArea}>
+          <div className={styles.optionsGrid}>
+            {options.map((option, idx) => {
+              let optionClass = styles.option;
+              if (isAnswered) {
+                if (option.id === currentCard.id) {
+                  optionClass += ` ${styles.correct}`;
+                } else if (option.id === selectedAnswer) {
+                  optionClass += ` ${styles.incorrect}`;
+                }
+              } else if (option.id === selectedAnswer) {
+                optionClass += ` ${styles.selected}`;
+              }
+              return (
+                <button
+                  key={option.id}
+                  className={optionClass}
+                  onClick={() => handleSelect(option)}
+                  disabled={isAnswered}
+                >
+                  <span className={styles.optionNumber}>{idx + 1}</span>
+                  <span className={styles.optionText}>{option.romaji}</span>
+                </button>
+              );
+            })}
+          </div>
+          {isAnswered && (
+            <div className={styles.feedback}>
+              <p className={isCorrect ? styles.correctText : styles.incorrectText}>
+                {isCorrect ? t.quiz.correct : `${t.quiz.incorrect} "${currentCard.romaji}"`}
+              </p>
+              <button className={styles.nextButton} onClick={handleNext}>
+                {(queue.length === 1 && isCorrect) ? t.quiz.finish : t.quiz.next}
+              </button>
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 }

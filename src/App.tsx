@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Page, StudyMode, ExtraStudyType } from './types';
+import { StudyMode, ExtraStudyType } from './types';
 import { Home } from './pages/Home';
 import { Study } from './pages/Study';
 import { Settings } from './pages/Settings';

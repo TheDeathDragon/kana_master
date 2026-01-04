@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { StudyMode, Kana, ExtraStudyType } from '../types';
 import { FlashCard } from '../components/FlashCard';
 import { QuizMode } from '../components/QuizMode';
@@ -11,6 +11,7 @@ import { calculateNextReview } from '../utils/sm2';
 import styles from './Study.module.css';
 
 const EXTRA_CARDS_COUNT = 5;
+const COMBO_PHASES: StudyMode[] = ['flashcard', 'quiz', 'writing'];
 
 interface StudyProps {
   mode: StudyMode;
@@ -31,7 +32,19 @@ export function Study({ mode, extraType, onExit }: StudyProps): React.ReactEleme
   });
   const [sessionCards, setSessionCards] = useState<Kana[] | null>(null);
   const [isComplete, setIsComplete] = useState(false);
-  const [sessionStats, setSessionStats] = useState({ correct: 0, total: 0 });
+  const [sessionStats, setSessionStats] = useState({ mastered: 0, needsReview: 0, total: 0 });
+  const exitButtonRef = useRef<HTMLButtonElement>(null);
+  const [currentPhase, setCurrentPhase] = useState(0);
+  const [phaseResults, setPhaseResults] = useState<Map<string, { quality: number; isCorrect: boolean }>>(new Map());
+  const [isPhaseVisible, setIsPhaseVisible] = useState(true);
+  const isComboMode = mode === 'combo';
+  const currentMode = isComboMode ? COMBO_PHASES[currentPhase] : mode;
+  const isLastPhase = currentPhase === COMBO_PHASES.length - 1;
+  useEffect(() => {
+    if (isComplete && exitButtonRef.current) {
+      exitButtonRef.current.focus();
+    }
+  }, [isComplete]);
   useEffect(() => {
     let cards: Kana[];
     if (extraType === 'extra-new') {
@@ -60,34 +73,58 @@ export function Study({ mode, extraType, onExit }: StudyProps): React.ReactEleme
     }
     setSessionCards(cards);
   }, []);
+  const saveProgress = (results: Map<string, { quality: number; isCorrect: boolean }>): void => {
+    let mastered = 0;
+    let needsReview = 0;
+    for (const result of results.values()) {
+      if (result.quality >= 4) {
+        mastered++;
+      } else {
+        needsReview++;
+      }
+    }
+    if (extraType !== 'practice') {
+      for (const [kanaId, result] of results) {
+        const isNew = !learnedKanaIds.includes(kanaId);
+        const existingState = cardStates[kanaId];
+        const currentState = existingState ?? createInitialCardState(kanaId);
+        const newState = calculateNextReview(currentState, result.quality);
+        updateCardState(newState);
+        if (isNew) {
+          addLearnedKana(kanaId);
+        }
+        incrementStats(isNew, result.isCorrect);
+      }
+    }
+    setSessionStats({ mastered, needsReview, total: results.size });
+  };
   const handleComplete = (results: { kanaId: string; quality: number; isCorrect?: boolean }[]): void => {
-    const uniqueResults = new Map<string, { kanaId: string; quality: number; isCorrect?: boolean }>();
+    const uniqueResults = new Map<string, { quality: number; isCorrect: boolean }>();
     for (const result of results) {
-      uniqueResults.set(result.kanaId, result);
+      uniqueResults.set(result.kanaId, {
+        quality: result.quality,
+        isCorrect: result.isCorrect ?? result.quality >= 3,
+      });
     }
-    let correct = 0;
-    for (const result of uniqueResults.values()) {
-      const isCorrect = result.isCorrect ?? result.quality >= 3;
-      if (isCorrect) correct++;
-    }
-    if (extraType === 'practice') {
-      setSessionStats({ correct, total: uniqueResults.size });
-      setIsComplete(true);
+    if (isComboMode) {
+      const newPhaseResults = new Map(phaseResults);
+      for (const [kanaId, result] of uniqueResults) {
+        newPhaseResults.set(kanaId, result);
+      }
+      setPhaseResults(newPhaseResults);
+      if (isLastPhase) {
+        saveProgress(newPhaseResults);
+        setIsComplete(true);
+      } else {
+        setIsPhaseVisible(false);
+        setTimeout(() => {
+          setCurrentPhase(prev => prev + 1);
+          setIsPhaseVisible(true);
+        }, 300);
+      }
       return;
     }
-    for (const result of uniqueResults.values()) {
-      const isNew = !learnedKanaIds.includes(result.kanaId);
-      const isCorrect = result.isCorrect ?? result.quality >= 3;
-      const existingState = cardStates[result.kanaId];
-      const currentState = existingState ?? createInitialCardState(result.kanaId);
-      const newState = calculateNextReview(currentState, result.quality);
-      updateCardState(newState);
-      if (isNew) {
-        addLearnedKana(result.kanaId);
-      }
-      incrementStats(isNew, isCorrect);
-    }
-    setSessionStats({ correct, total: uniqueResults.size });
+    saveProgress(uniqueResults);
     setIsComplete(true);
   };
   if (sessionCards === null) {
@@ -106,9 +143,6 @@ export function Study({ mode, extraType, onExit }: StudyProps): React.ReactEleme
     );
   }
   if (isComplete) {
-    const accuracy = sessionStats.total > 0
-      ? Math.round((sessionStats.correct / sessionStats.total) * 100)
-      : 0;
     return (
       <div className={styles.container}>
         <div className={styles.complete}>
@@ -118,12 +152,18 @@ export function Study({ mode, extraType, onExit }: StudyProps): React.ReactEleme
               <span className={styles.completeValue}>{sessionStats.total}</span>
               <span className={styles.completeLabel}>{t.study.cardsStudied}</span>
             </div>
-            <div className={styles.completeStat}>
-              <span className={styles.completeValue}>{accuracy}%</span>
-              <span className={styles.completeLabel}>{t.study.accuracy}</span>
+            <div className={`${styles.completeStat} ${styles.mastered}`}>
+              <span className={styles.completeValue}>{sessionStats.mastered}</span>
+              <span className={styles.completeLabel}>{t.study.mastered}</span>
             </div>
+            {sessionStats.needsReview > 0 && (
+              <div className={`${styles.completeStat} ${styles.needsReview}`}>
+                <span className={styles.completeValue}>{sessionStats.needsReview}</span>
+                <span className={styles.completeLabel}>{t.study.needsReview}</span>
+              </div>
+            )}
           </div>
-          <button className={styles.exitButton} onClick={onExit}>
+          <button ref={exitButtonRef} className={styles.exitButton} onClick={onExit}>
             {t.study.backToHome}
           </button>
         </div>
@@ -132,38 +172,55 @@ export function Study({ mode, extraType, onExit }: StudyProps): React.ReactEleme
   }
   return (
     <div className={styles.container}>
-      {mode === 'flashcard' && (
-        <FlashCard
-          cards={sessionCards}
-          onComplete={handleComplete}
-          onExit={onExit}
-          t={t}
-        />
+      {isComboMode && (
+        <div className={styles.phaseIndicator}>
+          {COMBO_PHASES.map((phase, idx) => (
+            <div
+              key={phase}
+              className={`${styles.phaseStep} ${idx < currentPhase ? styles.completed : ''} ${idx === currentPhase ? styles.active : ''}`}
+            >
+              <span className={styles.phaseNumber}>{idx + 1}</span>
+            </div>
+          ))}
+          <span className={styles.phaseLabel}>
+            {t.study.phase} {currentPhase + 1}{t.study.phaseOf}{COMBO_PHASES.length}
+          </span>
+        </div>
       )}
-      {mode === 'quiz' && (
-        <QuizMode
-          cards={sessionCards}
-          onComplete={handleComplete}
-          onExit={onExit}
-          t={t}
-        />
-      )}
-      {mode === 'writing' && (
-        <WritingMode
-          cards={sessionCards}
-          onComplete={handleComplete}
-          onExit={onExit}
-          t={t}
-        />
-      )}
-      {mode === 'pairing' && (
-        <PairingMode
-          cards={sessionCards}
-          onComplete={handleComplete}
-          onExit={onExit}
-          t={t}
-        />
-      )}
+      <div className={`${styles.phaseContent} ${isPhaseVisible ? styles.phaseVisible : ''}`}>
+        {currentMode === 'flashcard' && (
+          <FlashCard
+            cards={sessionCards}
+            onComplete={handleComplete}
+            onExit={onExit}
+            t={t}
+          />
+        )}
+        {currentMode === 'quiz' && (
+          <QuizMode
+            cards={sessionCards}
+            onComplete={handleComplete}
+            onExit={onExit}
+            t={t}
+          />
+        )}
+        {currentMode === 'writing' && (
+          <WritingMode
+            cards={sessionCards}
+            onComplete={handleComplete}
+            onExit={onExit}
+            t={t}
+          />
+        )}
+        {currentMode === 'pairing' && (
+          <PairingMode
+            cards={sessionCards}
+            onComplete={handleComplete}
+            onExit={onExit}
+            t={t}
+          />
+        )}
+      </div>
     </div>
   );
 }

@@ -76,3 +76,74 @@
   color: var(--text-secondary);
   margin-top: 4px;
 }
+
+.completeStat.mastered .completeValue {
+  color: var(--success);
+}
+
+.completeStat.needsReview .completeValue {
+  color: var(--warning);
+}
+
+.phaseIndicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 20px 24px;
+  background: var(--card-bg);
+  border-bottom: 1px solid var(--border);
+}
+
+.phaseStep {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--bg-tertiary);
+  border: 2px solid var(--border);
+  transition: all 0.2s ease;
+}
+
+.phaseStep.active {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.phaseStep.completed {
+  background: var(--success);
+  border-color: var(--success);
+}
+
+.phaseNumber {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-tertiary);
+}
+
+.phaseStep.active .phaseNumber,
+.phaseStep.completed .phaseNumber {
+  color: white;
+}
+
+.phaseLabel {
+  margin-left: 8px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.phaseContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  transform: translateX(20px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.phaseContent.phaseVisible {
+  opacity: 1;
+  transform: translateX(0);
+}

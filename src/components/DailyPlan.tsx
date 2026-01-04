@@ -77,35 +77,13 @@ export function DailyPlan({
       </div>
       {totalToStudy > 0 || extraMode ? (
         <div className={styles.modeSelection}>
-          <p className={styles.modeLabel}>{t.dailyPlan.chooseMode}</p>
           <div className={styles.modeButtons}>
             <button
-              className={styles.modeButton}
-              onClick={() => extraMode ? handleExtraStudy('flashcard') : onStartStudy('flashcard', 'normal')}
+              className={`${styles.modeButton} ${styles.mainButton}`}
+              onClick={() => extraMode ? handleExtraStudy('combo') : onStartStudy('combo', 'normal')}
             >
-              <span className={styles.modeName}>{t.modes.flashcard}</span>
-              <span className={styles.modeDesc}>{t.modes.flashcardDesc}</span>
-            </button>
-            <button
-              className={styles.modeButton}
-              onClick={() => extraMode ? handleExtraStudy('quiz') : onStartStudy('quiz', 'normal')}
-            >
-              <span className={styles.modeName}>{t.modes.quiz}</span>
-              <span className={styles.modeDesc}>{t.modes.quizDesc}</span>
-            </button>
-            <button
-              className={styles.modeButton}
-              onClick={() => extraMode ? handleExtraStudy('writing') : onStartStudy('writing', 'normal')}
-            >
-              <span className={styles.modeName}>{t.modes.writing}</span>
-              <span className={styles.modeDesc}>{t.modes.writingDesc}</span>
-            </button>
-            <button
-              className={styles.modeButton}
-              onClick={() => extraMode ? handleExtraStudy('pairing') : onStartStudy('pairing', 'normal')}
-            >
-              <span className={styles.modeName}>{t.modes.pairing}</span>
-              <span className={styles.modeDesc}>{t.modes.pairingDesc}</span>
+              <span className={styles.modeName}>{t.modes.startLearning}</span>
+              <span className={styles.modeDesc}>{t.modes.comboDesc}</span>
             </button>
           </div>
           {extraMode && (
@@ -132,12 +110,20 @@ export function DailyPlan({
                 </button>
               )}
               {hasPractice && (
-                <button
-                  className={styles.extraButton}
-                  onClick={() => setExtraMode('practice')}
-                >
-                  {t.dailyPlan.practice}
-                </button>
+                <>
+                  <button
+                    className={styles.extraButton}
+                    onClick={() => setExtraMode('practice')}
+                  >
+                    {t.dailyPlan.practice}
+                  </button>
+                  <button
+                    className={styles.extraButton}
+                    onClick={() => onStartStudy('pairing', 'practice')}
+                  >
+                    {t.modes.pairing}
+                  </button>
+                </>
               )}
             </div>
           )}

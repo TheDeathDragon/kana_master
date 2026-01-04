@@ -22,6 +22,8 @@ export function FlashCard({ cards, onComplete, onExit, t }: FlashCardProps): Rea
   const [masteredCount, setMasteredCount] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
   const [results, setResults] = useState<{ kanaId: string; quality: number }[]>([]);
+  const [isCardVisible, setIsCardVisible] = useState(true);
+  const [isOptionsVisible, setIsOptionsVisible] = useState(false);
   const currentCard = queue[0];
   const totalCards = cards.length;
   const progress = totalCards > 0 ? (masteredCount / totalCards) * 100 : 0;
@@ -29,21 +31,35 @@ export function FlashCard({ cards, onComplete, onExit, t }: FlashCardProps): Rea
     const newResults = [...results, { kanaId: currentCard.id, quality }];
     setResults(newResults);
     const isMastered = quality >= 4;
-    if (isMastered) {
-      setMasteredCount((prev) => prev + 1);
-      const newQueue = queue.slice(1);
-      if (newQueue.length === 0) {
-        onComplete(newResults);
+    setIsCardVisible(false);
+    setIsOptionsVisible(false);
+    setTimeout(() => {
+      if (isMastered) {
+        setMasteredCount((prev) => prev + 1);
+        const newQueue = queue.slice(1);
+        if (newQueue.length === 0) {
+          onComplete(newResults);
+        } else {
+          setQueue(newQueue);
+          setIsFlipped(false);
+          setIsCardVisible(true);
+        }
       } else {
+        const newQueue = [...queue.slice(1), currentCard];
         setQueue(newQueue);
         setIsFlipped(false);
+        setIsCardVisible(true);
       }
-    } else {
-      const newQueue = [...queue.slice(1), currentCard];
-      setQueue(newQueue);
-      setIsFlipped(false);
-    }
+    }, 300);
   }, [currentCard, queue, results, onComplete]);
+  useEffect(() => {
+    if (isFlipped) {
+      const timer = setTimeout(() => setIsOptionsVisible(true), 50);
+      return () => clearTimeout(timer);
+    } else {
+      setIsOptionsVisible(false);
+    }
+  }, [isFlipped]);
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent): void => {
       if (!isFlipped) {
@@ -82,26 +98,26 @@ export function FlashCard({ cards, onComplete, onExit, t }: FlashCardProps): Rea
           </span>
         </div>
       </div>
-      <div
-        className={styles.questionArea}
-        onClick={() => !isFlipped && setIsFlipped(true)}
-      >
-        <div className={styles.kanaDisplay}>
-          <span className={styles.mainKana}>
-            {currentCard.type === 'hiragana' ? currentCard.character : findPairedKana(currentCard)?.character}
-          </span>
-          <span className={styles.pairedKana}>
-            {currentCard.type === 'katakana' ? currentCard.character : findPairedKana(currentCard)?.character}
-          </span>
+      <div className={`${styles.mainContent} ${isFlipped ? styles.flipped : ''}`}>
+        <div
+          className={`${styles.questionArea} ${isCardVisible ? styles.cardVisible : styles.cardHidden}`}
+          onClick={() => !isFlipped && setIsFlipped(true)}
+        >
+          <div className={styles.kanaDisplay}>
+            <span className={styles.mainKana}>
+              {currentCard.type === 'hiragana' ? currentCard.character : findPairedKana(currentCard)?.character}
+            </span>
+            <span className={styles.pairedKana}>
+              {currentCard.type === 'katakana' ? currentCard.character : findPairedKana(currentCard)?.character}
+            </span>
+          </div>
+          {isFlipped ? (
+            <p className={styles.romaji}>{currentCard.romaji}</p>
+          ) : (
+            <p className={styles.hint}>{t.flashcard.clickToReveal}</p>
+          )}
         </div>
-        {isFlipped ? (
-          <p className={styles.romaji}>{currentCard.romaji}</p>
-        ) : (
-          <p className={styles.hint}>{t.flashcard.clickToReveal}</p>
-        )}
-      </div>
-      {isFlipped && (
-        <div className={styles.qualityButtons}>
+        <div className={`${styles.qualityButtons} ${isOptionsVisible ? styles.optionsVisible : ''}`}>
           <p className={styles.qualityLabel}>{t.flashcard.howWell}</p>
           <div className={styles.buttons}>
             {qualityOptions.map((option, idx) => (
@@ -117,7 +133,7 @@ export function FlashCard({ cards, onComplete, onExit, t }: FlashCardProps): Rea
             ))}
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }

@@ -18,6 +18,7 @@ export function WritingMode({ cards, onComplete, onExit, t }: WritingModeProps):
   const [isAnswered, setIsAnswered] = useState(false);
   const [isShaking, setIsShaking] = useState(false);
   const [wrongAttempts, setWrongAttempts] = useState(0);
+  const [didGiveUp, setDidGiveUp] = useState(false);
   const [results, setResults] = useState<{ kanaId: string; quality: number; isCorrect: boolean }[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const currentCard = queue[0];
@@ -26,7 +27,13 @@ export function WritingMode({ cards, onComplete, onExit, t }: WritingModeProps):
   useEffect(() => {
     inputRef.current?.focus();
     setWrongAttempts(0);
+    setDidGiveUp(false);
   }, [currentCard]);
+  useEffect(() => {
+    if (!isShaking && !isAnswered) {
+      inputRef.current?.focus();
+    }
+  }, [isShaking, isAnswered]);
   const checkAnswer = useCallback((): boolean => {
     return userInput.trim().toLowerCase() === currentCard?.romaji.toLowerCase();
   }, [userInput, currentCard]);
@@ -50,7 +57,12 @@ export function WritingMode({ cards, onComplete, onExit, t }: WritingModeProps):
     }
     setIsAnswered(true);
   }, [isAnswered, isShaking, userInput, checkAnswer, wrongAttempts]);
-  const isCorrect = userInput.trim().toLowerCase() === currentCard?.romaji.toLowerCase();
+  const isCorrect = !didGiveUp && userInput.trim().toLowerCase() === currentCard?.romaji.toLowerCase();
+  const handleForgot = useCallback(() => {
+    setUserInput(currentCard?.romaji || '');
+    setDidGiveUp(true);
+    setIsAnswered(true);
+  }, [currentCard]);
   const handleNext = useCallback(() => {
     const quality = isCorrect ? 4 : 1;
     const newResults = [...results, { kanaId: currentCard.id, quality, isCorrect }];
@@ -117,65 +129,72 @@ export function WritingMode({ cards, onComplete, onExit, t }: WritingModeProps):
           </span>
         </div>
       </div>
-      <div className={styles.questionArea}>
-        <div className={styles.kanaDisplay}>
-          <span className={styles.mainKana}>{currentCard.type === 'hiragana' ? currentCard.character : findPairedKana(currentCard)?.character}</span>
-          <span className={styles.pairedKana}>{currentCard.type === 'katakana' ? currentCard.character : findPairedKana(currentCard)?.character}</span>
-        </div>
-        <p className={styles.question}>
-          {t.writing.typeRomaji}
-        </p>
-      </div>
-      <div className={styles.inputArea}>
-        <input
-          ref={inputRef}
-          type="text"
-          className={`${styles.input} ${isShaking ? styles.inputShake : ''} ${isAnswered ? styles.inputCorrect : ''}`}
-          value={userInput}
-          onChange={(e) => {
-            const filtered = e.target.value.replace(/[^a-zA-Z]/g, '');
-            setUserInput(filtered);
-          }}
-          onKeyDown={handleInputKeyDown}
-          placeholder={t.writing.placeholder}
-          disabled={isAnswered || isShaking}
-          autoComplete="off"
-        />
-        {!isAnswered && (
-          <div className={styles.buttonGroup}>
-            <button
-              className={styles.forgotButton}
-              onClick={() => setIsAnswered(true)}
-            >
-              {t.writing.forgot}
-            </button>
-            <button
-              className={styles.submitButton}
-              onClick={handleSubmit}
-              disabled={!userInput.trim()}
-            >
-              {t.writing.check}
-            </button>
+      <div className={styles.mainContent}>
+        <div className={styles.questionArea}>
+          <div className={styles.kanaDisplay}>
+            <span className={styles.mainKana}>{currentCard.type === 'hiragana' ? currentCard.character : findPairedKana(currentCard)?.character}</span>
+            <span className={styles.pairedKana}>{currentCard.type === 'katakana' ? currentCard.character : findPairedKana(currentCard)?.character}</span>
           </div>
-        )}
-      </div>
-      {isAnswered && (
-        <div className={styles.feedback}>
-          {isCorrect ? (
-            <p className={styles.correctText}>{t.writing.correct}</p>
-          ) : (
-            <div className={styles.incorrectFeedback}>
-              <p className={styles.incorrectText}>{t.writing.incorrect}</p>
-              <p className={styles.correctAnswer}>
-                {t.writing.correctAnswer} <span className={styles.romajiAnswer}>{currentCard.romaji}</span>
-              </p>
-            </div>
-          )}
-          <button className={styles.nextButton} onClick={handleNext}>
-            {(queue.length === 1 && isCorrect) ? t.writing.finish : t.writing.next}
-          </button>
+          <p className={styles.question}>
+            {t.writing.typeRomaji}
+          </p>
         </div>
-      )}
+        <div className={styles.answerArea}>
+          <div className={styles.inputArea}>
+            <input
+              ref={inputRef}
+              type="text"
+              className={`${styles.input} ${isShaking ? styles.inputShake : ''} ${isAnswered ? (isCorrect ? styles.inputCorrect : styles.inputIncorrect) : ''}`}
+              value={userInput}
+              onChange={(e) => {
+                const filtered = e.target.value.replace(/[^a-zA-Z]/g, '');
+                setUserInput(filtered);
+              }}
+              onKeyDown={handleInputKeyDown}
+              placeholder={t.writing.placeholder}
+              disabled={isAnswered || isShaking}
+              autoComplete="off"
+            />
+            {!isAnswered && (
+              <div className={styles.buttonGroup}>
+                <button
+                  className={styles.forgotButton}
+                  onClick={handleForgot}
+                >
+                  {t.writing.forgot}
+                </button>
+                <button
+                  className={styles.submitButton}
+                  onClick={handleSubmit}
+                  disabled={!userInput.trim()}
+                >
+                  {t.writing.check}
+                </button>
+              </div>
+            )}
+          </div>
+          {isAnswered && (
+            isCorrect ? (
+              <div className={styles.feedbackWithProgress}>
+                <div className={styles.autoAdvanceBar} />
+                <p className={styles.correctText}>{t.writing.correct}</p>
+              </div>
+            ) : (
+              <div className={styles.feedback}>
+                <div className={styles.incorrectFeedback}>
+                  <p className={styles.incorrectText}>{t.writing.incorrect}</p>
+                  <p className={styles.correctAnswer}>
+                    {t.writing.correctAnswer} <span className={styles.romajiAnswer}>{currentCard.romaji}</span>
+                  </p>
+                </div>
+                <button className={styles.nextButton} onClick={handleNext}>
+                  {queue.length === 1 ? t.writing.finish : t.writing.next}
+                </button>
+              </div>
+            )
+          )}
+        </div>
+      </div>
     </div>
   );
 }
