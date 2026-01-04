@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Kana } from '../types';
-import { FlippableKanaCard } from './KanaCard';
+import { findPairedKana } from '../data/kana';
 import { Translations } from '../i18n';
 import styles from './FlashCard.module.css';
 
@@ -28,8 +28,8 @@ export function FlashCard({ cards, onComplete, onExit, t }: FlashCardProps): Rea
   const handleQuality = useCallback((quality: number) => {
     const newResults = [...results, { kanaId: currentCard.id, quality }];
     setResults(newResults);
-    const isCorrect = quality >= 3;
-    if (isCorrect) {
+    const isMastered = quality >= 4;
+    if (isMastered) {
       setMasteredCount((prev) => prev + 1);
       const newQueue = queue.slice(1);
       if (newQueue.length === 0) {
@@ -82,15 +82,21 @@ export function FlashCard({ cards, onComplete, onExit, t }: FlashCardProps): Rea
           </span>
         </div>
       </div>
-      <div className={styles.cardArea}>
-        <FlippableKanaCard
-          key={currentCard.id}
-          kana={currentCard}
-          size="large"
-          showPaired={true}
-          onFlip={setIsFlipped}
-        />
-        {!isFlipped && (
+      <div
+        className={styles.questionArea}
+        onClick={() => !isFlipped && setIsFlipped(true)}
+      >
+        <div className={styles.kanaDisplay}>
+          <span className={styles.mainKana}>
+            {currentCard.type === 'hiragana' ? currentCard.character : findPairedKana(currentCard)?.character}
+          </span>
+          <span className={styles.pairedKana}>
+            {currentCard.type === 'katakana' ? currentCard.character : findPairedKana(currentCard)?.character}
+          </span>
+        </div>
+        {isFlipped ? (
+          <p className={styles.romaji}>{currentCard.romaji}</p>
+        ) : (
           <p className={styles.hint}>{t.flashcard.clickToReveal}</p>
         )}
       </div>

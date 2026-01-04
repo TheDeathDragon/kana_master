@@ -29,7 +29,7 @@ export function Study({ mode, extraType, onExit }: StudyProps): React.ReactEleme
     todayNewLearned: statistics.todayNewLearned,
     todayReviewed: statistics.todayReviewed,
   });
-  const [sessionCards, setSessionCards] = useState<Kana[]>([]);
+  const [sessionCards, setSessionCards] = useState<Kana[] | null>(null);
   const [isComplete, setIsComplete] = useState(false);
   const [sessionStats, setSessionStats] = useState({ correct: 0, total: 0 });
   useEffect(() => {
@@ -61,17 +61,21 @@ export function Study({ mode, extraType, onExit }: StudyProps): React.ReactEleme
     setSessionCards(cards);
   }, []);
   const handleComplete = (results: { kanaId: string; quality: number; isCorrect?: boolean }[]): void => {
-    let correct = 0;
+    const uniqueResults = new Map<string, { kanaId: string; quality: number; isCorrect?: boolean }>();
     for (const result of results) {
+      uniqueResults.set(result.kanaId, result);
+    }
+    let correct = 0;
+    for (const result of uniqueResults.values()) {
       const isCorrect = result.isCorrect ?? result.quality >= 3;
       if (isCorrect) correct++;
     }
     if (extraType === 'practice') {
-      setSessionStats({ correct, total: results.length });
+      setSessionStats({ correct, total: uniqueResults.size });
       setIsComplete(true);
       return;
     }
-    for (const result of results) {
+    for (const result of uniqueResults.values()) {
       const isNew = !learnedKanaIds.includes(result.kanaId);
       const isCorrect = result.isCorrect ?? result.quality >= 3;
       const existingState = cardStates[result.kanaId];
@@ -83,9 +87,12 @@ export function Study({ mode, extraType, onExit }: StudyProps): React.ReactEleme
       }
       incrementStats(isNew, isCorrect);
     }
-    setSessionStats({ correct, total: results.length });
+    setSessionStats({ correct, total: uniqueResults.size });
     setIsComplete(true);
   };
+  if (sessionCards === null) {
+    return <div className={styles.container} />;
+  }
   if (sessionCards.length === 0) {
     return (
       <div className={styles.container}>
@@ -105,7 +112,6 @@ export function Study({ mode, extraType, onExit }: StudyProps): React.ReactEleme
     return (
       <div className={styles.container}>
         <div className={styles.complete}>
-          <span className={styles.completeIcon}>🎉</span>
           <h2 className={styles.completeTitle}>{t.study.sessionComplete}</h2>
           <div className={styles.completeStats}>
             <div className={styles.completeStat}>

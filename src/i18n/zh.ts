@@ -3,6 +3,12 @@ export const zh = {
     title: '假名大师',
     settings: '设置',
   },
+  buttons: {
+    dark: '深色',
+    light: '浅色',
+    settings: '设置',
+    switchToZh: '中文',
+  },
   dailyPlan: {
     title: '今日计划',
     reviewsDue: '待复习',

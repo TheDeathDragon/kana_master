@@ -3,6 +3,12 @@ export const en = {
     title: 'Kana Master',
     settings: 'Settings',
   },
+  buttons: {
+    dark: 'Dark',
+    light: 'Light',
+    settings: 'Settings',
+    switchToZh: 'ZH',
+  },
   dailyPlan: {
     title: "Today's Plan",
     reviewsDue: 'Reviews Due',

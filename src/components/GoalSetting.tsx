@@ -8,13 +8,14 @@ interface GoalSettingProps {
   goals: LearningGoals;
   onSave: (goals: LearningGoals) => void;
   onCancel: () => void;
+  onReset: () => void;
   t: Translations;
 }
 
 const newCardOptions = [5, 10, 15, 20, 25, 30];
 const reviewLimitOptions = [20, 50, 100, 150, 200];
 
-export function GoalSetting({ goals, onSave, onCancel, t }: GoalSettingProps): React.ReactElement {
+export function GoalSetting({ goals, onSave, onCancel, onReset, t }: GoalSettingProps): React.ReactElement {
   const [dailyNewCards, setDailyNewCards] = useState(goals.dailyNewCards);
   const [dailyReviewLimit, setDailyReviewLimit] = useState(goals.dailyReviewLimit);
   const [kanaTypes, setKanaTypes] = useState<KanaType[]>([...goals.kanaTypes]);
@@ -159,12 +160,17 @@ export function GoalSetting({ goals, onSave, onCancel, t }: GoalSettingProps): R
         </div>
       </div>
       <div className={styles.actions}>
-        <button className={styles.cancelButton} onClick={onCancel}>
-          {t.settings.cancel}
+        <button className={styles.resetButton} onClick={onReset}>
+          {t.settings.resetAll}
         </button>
-        <button className={styles.saveButton} onClick={handleSave}>
-          {t.settings.saveGoals}
-        </button>
+        <div className={styles.actionRight}>
+          <button className={styles.cancelButton} onClick={onCancel}>
+            {t.settings.cancel}
+          </button>
+          <button className={styles.saveButton} onClick={handleSave}>
+            {t.settings.saveGoals}
+          </button>
+        </div>
       </div>
     </div>
   );

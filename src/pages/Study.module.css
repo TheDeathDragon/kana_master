@@ -1,8 +1,9 @@
 .container {
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   background: var(--bg-primary);
+  overflow: hidden;
 }
 
 .empty {
@@ -44,10 +45,6 @@
   justify-content: center;
   gap: 24px;
   padding: 40px;
-}
-
-.completeIcon {
-  font-size: 64px;
 }
 
 .completeTitle {

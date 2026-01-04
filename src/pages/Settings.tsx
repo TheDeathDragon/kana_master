@@ -12,14 +12,14 @@ interface SettingsProps {
 export function Settings({ onBack }: SettingsProps): React.ReactElement {
   const { storage, updateGoals, resetData } = useStorage();
   const { t } = useLanguage();
-  const [showResetConfirm, setShowResetConfirm] = useState(false);
+  const [showResetModal, setShowResetModal] = useState(false);
   const handleSave = (goals: LearningGoals): void => {
     updateGoals(goals);
     onBack();
   };
   const handleReset = (): void => {
     resetData();
-    setShowResetConfirm(false);
+    setShowResetModal(false);
     onBack();
   };
   return (
@@ -35,35 +35,29 @@ export function Settings({ onBack }: SettingsProps): React.ReactElement {
           goals={storage.goals}
           onSave={handleSave}
           onCancel={onBack}
+          onReset={() => setShowResetModal(true)}
           t={t}
         />
-        <div className={styles.dangerZone}>
-          <h3 className={styles.dangerTitle}>{t.settings.dangerZone}</h3>
-          <p className={styles.dangerText}>
-            {t.settings.resetWarning}
-          </p>
-          {!showResetConfirm ? (
-            <button
-              className={styles.resetButton}
-              onClick={() => setShowResetConfirm(true)}
-            >
-              {t.settings.resetAll}
-            </button>
-          ) : (
-            <div className={styles.confirmButtons}>
-              <button className={styles.confirmReset} onClick={handleReset}>
-                {t.settings.confirmReset}
-              </button>
+      </main>
+      {showResetModal && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modal}>
+            <h3 className={styles.modalTitle}>{t.settings.resetAll}</h3>
+            <p className={styles.modalText}>{t.settings.resetWarning}</p>
+            <div className={styles.modalActions}>
               <button
-                className={styles.cancelReset}
-                onClick={() => setShowResetConfirm(false)}
+                className={styles.modalCancel}
+                onClick={() => setShowResetModal(false)}
               >
                 {t.settings.cancel}
               </button>
+              <button className={styles.modalConfirm} onClick={handleReset}>
+                {t.settings.confirmReset}
+              </button>
             </div>
-          )}
+          </div>
         </div>
-      </main>
+      )}
     </div>
   );
 }

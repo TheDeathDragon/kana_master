@@ -85,6 +85,14 @@ export function WritingMode({ cards, onComplete, onExit, t }: WritingModeProps):
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isAnswered, handleNext, onExit]);
+  useEffect(() => {
+    if (isAnswered && isCorrect) {
+      const timer = setTimeout(() => {
+        handleNext();
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [isAnswered, isCorrect, handleNext]);
   const handleInputKeyDown = (e: React.KeyboardEvent): void => {
     if (e.key === 'Enter' && !isAnswered) {
       e.preventDefault();

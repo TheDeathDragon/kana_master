@@ -54,13 +54,38 @@
   white-space: nowrap;
 }
 
-.cardArea {
-  flex: 1;
+.questionArea {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 20px;
+  padding: 40px 20px;
+  cursor: pointer;
+}
+
+.kanaDisplay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-family: 'Noto Sans JP', sans-serif;
+  margin-bottom: 16px;
+}
+
+.mainKana {
+  font-size: 5rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.pairedKana {
+  font-size: 3rem;
+  color: var(--text-secondary);
+}
+
+.romaji {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--text-primary);
 }
 
 .hint {
@@ -73,7 +98,7 @@
   flex-direction: column;
   align-items: center;
   gap: 16px;
-  padding: 20px;
+  padding: 20px 20px 40px;
 }
 
 .qualityLabel {

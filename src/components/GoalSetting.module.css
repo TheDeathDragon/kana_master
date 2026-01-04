@@ -138,11 +138,32 @@
 
 .actions {
   display: flex;
-  justify-content: flex-end;
-  gap: 12px;
+  justify-content: space-between;
+  align-items: center;
   margin-top: 32px;
   padding-top: 20px;
   border-top: 1px solid var(--border);
+}
+
+.actionRight {
+  display: flex;
+  gap: 12px;
+}
+
+.resetButton {
+  padding: 12px 24px;
+  background: transparent;
+  border: 1px solid var(--error);
+  border-radius: 8px;
+  font-size: 16px;
+  color: var(--error);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.resetButton:hover {
+  background: var(--error);
+  color: white;
 }
 
 .cancelButton {
