@@ -1,0 +1,186 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.exitButton {
+  padding: 8px 16px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--text-secondary);
+  transition: background 0.2s ease;
+}
+
+.exitButton:hover {
+  background: var(--bg-tertiary);
+}
+
+.progress {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.progressBar {
+  flex: 1;
+  height: 8px;
+  background: var(--bg-secondary);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--primary);
+  transition: width 0.3s ease;
+}
+
+.progressText {
+  font-size: 14px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.questionArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+.kanaDisplay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-family: 'Noto Sans JP', sans-serif;
+  margin-bottom: 20px;
+}
+
+.mainKana {
+  font-size: 5rem;
+  color: var(--text-primary);
+}
+
+.pairedKana {
+  font-size: 3rem;
+  color: var(--text-secondary);
+}
+
+.question {
+  font-size: 18px;
+  color: var(--text-secondary);
+}
+
+.optionsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  background: var(--card-bg);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 18px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.option:hover:not(:disabled) {
+  border-color: var(--primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.option:disabled {
+  cursor: default;
+}
+
+.option.selected {
+  border-color: var(--primary);
+  background: var(--primary-light);
+}
+
+.option.correct {
+  border-color: #22c55e;
+  background: rgba(34, 197, 94, 0.1);
+}
+
+.option.incorrect {
+  border-color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.optionNumber {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: var(--bg-secondary);
+  border-radius: 6px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.optionText {
+  flex: 1;
+  text-align: left;
+  color: var(--text-primary);
+}
+
+.feedback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+}
+
+.correctText {
+  font-size: 20px;
+  font-weight: 600;
+  color: #22c55e;
+}
+
+.incorrectText {
+  font-size: 20px;
+  font-weight: 600;
+  color: #ef4444;
+}
+
+.nextButton {
+  padding: 12px 32px;
+  background: var(--primary);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.nextButton:hover {
+  opacity: 0.9;
+}

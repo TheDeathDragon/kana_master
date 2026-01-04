@@ -1,0 +1,176 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.exitButton {
+  padding: 8px 16px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--text-secondary);
+  transition: background 0.2s ease;
+}
+
+.exitButton:hover {
+  background: var(--bg-tertiary);
+}
+
+.progress {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.progressBar {
+  flex: 1;
+  height: 8px;
+  background: var(--bg-secondary);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--primary);
+  transition: width 0.3s ease;
+}
+
+.progressText {
+  font-size: 14px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.questionArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+.kanaDisplay {
+  font-size: 6rem;
+  font-family: 'Noto Sans JP', sans-serif;
+  color: var(--primary);
+  margin-bottom: 20px;
+}
+
+.question {
+  font-size: 18px;
+  color: var(--text-secondary);
+}
+
+.optionsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: var(--card-bg);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.option:hover:not(:disabled) {
+  border-color: var(--primary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.option:disabled {
+  cursor: default;
+}
+
+.optionNumber {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  margin-bottom: 4px;
+}
+
+.optionText {
+  font-size: 3rem;
+  font-family: 'Noto Sans JP', sans-serif;
+  color: var(--text-primary);
+}
+
+.selected {
+  border-color: var(--primary);
+  background: var(--primary-light);
+}
+
+.correct {
+  border-color: #22c55e;
+  background: rgba(34, 197, 94, 0.1);
+}
+
+.correct .optionText {
+  color: #22c55e;
+}
+
+.incorrect {
+  border-color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.incorrect .optionText {
+  color: #ef4444;
+}
+
+.feedback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+}
+
+.correctText {
+  font-size: 24px;
+  font-weight: 600;
+  color: #22c55e;
+}
+
+.incorrectText {
+  font-size: 24px;
+  font-weight: 600;
+  color: #ef4444;
+}
+
+.nextButton {
+  padding: 12px 32px;
+  background: var(--primary);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.nextButton:hover {
+  opacity: 0.9;
+}

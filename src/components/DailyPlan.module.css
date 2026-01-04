@@ -1,0 +1,164 @@
+.container {
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px;
+  background: var(--bg-secondary);
+  border-radius: 12px;
+}
+
+.statValue {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.statLabel {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+.modeSelection {
+  margin-top: 20px;
+}
+
+.modeLabel {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.modeButtons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.modeButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 16px;
+  background: var(--bg-secondary);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.modeButton:hover {
+  border-color: var(--primary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.modeIcon {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.modeName {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.modeDesc {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.completed {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 20px;
+}
+
+.completedIcon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.completedText {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.completedSub {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.extraStudy {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.extraButton {
+  padding: 12px 24px;
+  background: var(--bg-secondary);
+  border: 2px solid var(--primary);
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--primary);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.extraButton:hover {
+  background: var(--primary);
+  color: white;
+}
+
+.cancelButton {
+  margin-top: 16px;
+  padding: 10px 20px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 14px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.cancelButton:hover {
+  background: var(--bg-tertiary);
+}
+
+@media (max-width: 600px) {
+  .stats {
+    grid-template-columns: 1fr;
+  }
+
+  .modeButtons {
+    grid-template-columns: 1fr;
+  }
+}

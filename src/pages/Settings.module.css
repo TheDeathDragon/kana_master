@@ -1,0 +1,114 @@
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  background: var(--card-bg);
+  border-bottom: 1px solid var(--border);
+}
+
+.backButton {
+  padding: 8px 16px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 14px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.backButton:hover {
+  background: var(--bg-tertiary);
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.main {
+  flex: 1;
+  padding: 24px;
+  max-width: 800px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.dangerZone {
+  margin-top: 40px;
+  padding: 24px;
+  background: rgba(239, 68, 68, 0.05);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 12px;
+}
+
+.dangerTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #ef4444;
+  margin-bottom: 8px;
+}
+
+.dangerText {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+}
+
+.resetButton {
+  padding: 10px 20px;
+  background: transparent;
+  border: 1px solid #ef4444;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #ef4444;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.resetButton:hover {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.confirmButtons {
+  display: flex;
+  gap: 12px;
+}
+
+.confirmReset {
+  padding: 10px 20px;
+  background: #ef4444;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  color: white;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.confirmReset:hover {
+  opacity: 0.9;
+}
+
+.cancelReset {
+  padding: 10px 20px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 14px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.cancelReset:hover {
+  background: var(--bg-tertiary);
+}

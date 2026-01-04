@@ -1,0 +1,177 @@
+.container {
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 24px;
+}
+
+.section {
+  margin-bottom: 28px;
+}
+
+.sectionTitle {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+.optionGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.optionButton {
+  padding: 10px 20px;
+  background: var(--bg-secondary);
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  font-size: 16px;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.optionButton:hover {
+  border-color: var(--primary);
+}
+
+.optionButton.selected {
+  border-color: var(--primary);
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+.checkboxGroup {
+  display: flex;
+  gap: 20px;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.checkbox input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--primary);
+}
+
+.checkbox span {
+  font-size: 16px;
+  color: var(--text-primary);
+}
+
+.quickSelect {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.quickButton {
+  padding: 8px 16px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 14px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.quickButton:hover {
+  background: var(--bg-tertiary);
+}
+
+.groupSection {
+  margin-bottom: 16px;
+}
+
+.groupTitle {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.groupGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 8px;
+}
+
+.groupCheckbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  background: var(--bg-secondary);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.groupCheckbox:hover {
+  background: var(--bg-tertiary);
+}
+
+.groupCheckbox input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--primary);
+}
+
+.groupCheckbox span {
+  font-size: 13px;
+  color: var(--text-primary);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 32px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+.cancelButton {
+  padding: 12px 24px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 16px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.cancelButton:hover {
+  background: var(--bg-tertiary);
+}
+
+.saveButton {
+  padding: 12px 24px;
+  background: var(--primary);
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  color: white;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.saveButton:hover {
+  opacity: 0.9;
+}
